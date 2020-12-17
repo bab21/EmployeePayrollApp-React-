@@ -1,0 +1,31 @@
+{
+    "employee":[
+        {
+            "name": "Babli Yadav",
+            "department": [
+                "HR",
+                "SALES"
+            ],
+            "gender": "female",
+            "salary": "50000",
+            "startDate": "1 Jan 2020",
+            "notes": "Hello there",
+            "id": 1000456890000,
+            "profilePic": "../../assests/profile-images/Ellipse 1.png"
+        },
+        {
+            "name": "Sagar Yadav",
+            "department": [
+                "HR",
+                "SALES",
+                "ENGINEER"
+            ],
+            "gender": "male",
+            "salary": "50900",
+            "startDate": "12 Jan 2020",
+            "notes": "Hello there",
+            "id": 1000456890700,
+            "profilePic": "../../assests/profile-images/Ellipse 8.png"  
+        }
+    ]
+}
