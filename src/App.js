@@ -9,9 +9,9 @@ function App() {
     <div className="App">
       <Router>
         <Switch>
-          <Router exact path="">
+          <Route exact path="" component={PayrollForm}>
             <PayrollForm />
-          </Router>
+          </Route>
         </Switch>
       </Router>
            
