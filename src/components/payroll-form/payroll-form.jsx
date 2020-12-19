@@ -150,7 +150,7 @@ class PayrollForm extends Component{
             departments : this.state.departments,
             gender: this.state.gender,
             salary: this.state.salary,
-            startDate: `${this.state.day} ${this.state.month} ${this.state.year}`,
+            startDate: `${this.state.year}-${this.state.month}-${this.state.day}`,
             notes: this.state.notes,
             // id: formValue.id,
             profilePic: this.state.profilePic,
@@ -220,6 +220,7 @@ class PayrollForm extends Component{
         console.log("day entered is"+this.state.day);
     }
     changeMonthHandler=(event)=>{
+        // let monthEntered= event.target.value;
         this.setState({month:event.target.value});
         console.log("month entered is"+this.state.month);
     }
@@ -281,9 +282,9 @@ class PayrollForm extends Component{
                         <div class="row-content">
                             <label class="label text" for="gender">Gender</label>
                             <div>
-                                <input type="radio" id="male" name="gender" value="male" checked={this.state.gender === 'male'} onChange={this.changeGenderHandler}/>
+                                <input type="radio" id="male" name="gender" value='M' checked={this.state.gender === 'M'} onChange={this.changeGenderHandler}/>
                                 <label class="text" for="male">Male</label>
-                                <input type="radio" id="female" name="gender" value="female" checked={this.state.gender === 'female'} onChange={this.changeGenderHandler}/>
+                                <input type="radio" id="female" name="gender" value='F' checked={this.state.gender === 'F'} onChange={this.changeGenderHandler}/>
                                 <label class="text" for="female">Female</label>
                             </div>
                         </div>
@@ -312,15 +313,15 @@ class PayrollForm extends Component{
                         <label class="label text" for="startDate">Start Date</label>
                         <div>
                             <select id="day" name="day" onChange={this.changeDayHandler}> 
-                                <option value="1">1</option>
-                                <option value="2">2</option>
-                                <option value="3">3</option>
-                                <option value="4">4</option>
-                                <option value="5">5</option>
-                                <option value="6">6</option>
-                                <option value="7">7</option>
-                                <option value="8">8</option>
-                                <option value="9">9</option>
+                                <option value="01">1</option>
+                                <option value="02">2</option>
+                                <option value="03">3</option>
+                                <option value="04">4</option>
+                                <option value="05">5</option>
+                                <option value="06">6</option>
+                                <option value="07">7</option>
+                                <option value="08">8</option>
+                                <option value="09">9</option>
                                 <option value="10">10</option>
                                 <option value="11">11</option>
                                 <option value="12">12</option>
@@ -345,18 +346,18 @@ class PayrollForm extends Component{
                                 <option value="31">31</option>
                             </select>
                             <select id="month" name="Month" onChange={this.changeMonthHandler}>
-                                <option value="Jan">January</option>
-                                <option value="Feb">Febuary</option>
-                                <option value="Mar">March</option>
-                                <option value="Apr">April</option>
-                                <option value="May">May</option>
-                                <option value="Jun">June</option>
-                                <option value="Jul">July</option>
-                                <option value="Aug">August</option>
-                                <option value="Sep">September</option>
-                                <option value="Oct">October</option>
-                                <option value="Nov">November</option>
-                                <option value="Dec">December</option>
+                                <option value="01">January</option>
+                                <option value="02">Febuary</option>
+                                <option value="03">March</option>
+                                <option value="04">April</option>
+                                <option value="05">May</option>
+                                <option value="06">June</option>
+                                <option value="07">July</option>
+                                <option value="08">August</option>
+                                <option value="09">September</option>
+                                <option value="10">October</option>
+                                <option value="11">November</option>
+                                <option value="12">December</option>
                             </select>
                             <select id="year" name="Year" onChange={this.changeYearHandler}>
                                 <option value="2020">2020</option>
