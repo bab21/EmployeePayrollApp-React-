@@ -9,7 +9,7 @@ function App() {
     <div className="App">
       <Router>
         <Switch>
-          <Route path="/add-employee" component={PayrollForm}>
+          <Route path="/add-employee/:id" component={PayrollForm}>
             <PayrollForm />
           </Route>
           <Route path = "/home" component = {Home}>

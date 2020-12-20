@@ -5,6 +5,7 @@ import profile3 from '../../assets/profile-images/Ellipse -8.png';
 import profile4 from '../../assets/profile-images/Ellipse -7.png';
 import './home.scss';
 import logo from '../../assets/images/logo.png';
+
 import deleteIcon from '../../assets/icons/delete-black-18dp.svg';
 import updateIcon from '../../assets/icons/create-black-18dp.svg'
 import {useParams,Link,withRouter} from 'react-router-dom';
@@ -36,7 +37,7 @@ class Home extends Component{
         .catch(err => console.log(err));
         console.log("all" +this.state.employees);
     }
-
+    
 
     deleteEmployee(id){
         EmployeeService.deleteEmployee(id).then( res => {
@@ -44,8 +45,16 @@ class Home extends Component{
         });
     }
     updateEmployee(id){
-
+        this.props.history.push(`/add-employee/${id}`);
     }
+
+    // getDeptHtml(deptList){
+    //     let deptHtml ='';
+    //     for(const dept of deptList){
+    //         deptHtml =`${deptHtml}<div class='dept-label>${dept}</div>`;
+    //     }
+    //     return deptHtml;
+    // }
     
     render(){
         return(
@@ -64,7 +73,7 @@ class Home extends Component{
                         <div class="emp-detail-text">
                             Employee Details <div class="emp-count">10</div>
                         </div>
-                        <Link to="/add-employee" class="add-button">
+                        <Link to="/add-employee/_add" class="add-button">
                         <img src="../../assets/icons/add-24px.svg" alt=""/>Add User</Link>
                     </div>
                     <table id="table-display" class="table">
@@ -78,19 +87,21 @@ class Home extends Component{
                                         profile3:
                                         employee.profilePic==="../../assets/profile-images/Ellipse -7.png"?
                                         profile4:
-                                        employee.profilePic==="../../assets/profile-images/Ellipse 1.png"?
+                                        employee.profilePic==="../../assets/profile-images/Ellipse -1.png"?
                                         profile2:profile1
                                         
                                     } alt="Image"/></td>
                                     <td>{employee.name}</td>
                                     <td>{employee.gender}</td>
-                                    <td>None</td>
+                                    <td>{
+                                       employee.departments.map(
+                                           dept=>(<div class='dept-level'>{dept}</div>)
+                                       )}</td>
                                     <td>{employee.salary}</td>
                                     <td>{employee.startDate}</td>
                                     <td>
-                                        <img id={employee.id} onClick={()=>this.deleteEmployee(employee.id)} alt="delete" src={deleteIcon} />
-                                        <img id={employee.id} onClick={()=>this.updateEmployee(employee.id)} alt="update" src={updateIcon} />
-                                        
+                                        <img id={employee.employeeId} onClick={()=>this.deleteEmployee(employee.employeeId)} alt="delete" src={deleteIcon} />
+                                        <img id={employee.employeeId} onClick={()=>this.updateEmployee(employee.employeeId)} alt="update" src={updateIcon} />
                                     </td>
                                 </tr>
                                 )
@@ -104,4 +115,4 @@ class Home extends Component{
     }
 }
 
-export default Home
+export default withRouter(Home)

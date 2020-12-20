@@ -114,11 +114,13 @@ import EmployeeService from '../../services/EmployeeService'
 //     )
 // }
 
+
 class PayrollForm extends Component{
     constructor(props){
         super(props)
 
         this.state={
+            id: this.props.match.params.id,
             name: '',
             salary: '',
             notes: '',
@@ -142,6 +144,39 @@ class PayrollForm extends Component{
         // this.onCheckChange=this.onCheckChange.bind(this);
 
     }
+    componentWillMount(){
+        if(this.state.id === '_add'){
+            return
+        }else{
+            EmployeeService.getEmployeeById(this.state.id).then( (res) =>{
+                let employee = res.data.data;
+                console.log(employee);
+                let date= employee.startDate.split("-");
+                let Oday=date[2];
+                let Omonth=date[1];
+                let Oyear=date[0];
+                let Oname=employee.name;
+                let Onotes=employee.notes;
+                let Odepartments=employee.departments;
+                let Osalary=employee.salary;
+                let Ogender=employee.gender;
+                let OprofilePic=employee.profilePic;
+
+                this.setState({name: Oname,
+                    salary: Osalary,
+                    gender: Ogender,
+                    notes: Onotes,
+                    profilePic: OprofilePic,
+                    departments: Odepartments,
+                    year: Oyear,
+                    day: Oday,
+                    month: Omonth
+                });
+            });
+        } 
+        console.log("The state is");
+        console.log(this.state);       
+    }
     saveOrUpdateEmployee = (event) => {
         event.preventDefault();
         console.log(this.state.departments);
@@ -156,18 +191,18 @@ class PayrollForm extends Component{
             profilePic: this.state.profilePic,
           };
         console.log('employee => ' + JSON.stringify(employee));
-        EmployeeService.createEmployee(employee);
+        // EmployeeService.createEmployee(employee);
 
 
-        // if(this.state.id === '_add'){
-        //     EmployeeService.createEmployee(employee).then(res =>{
-        //         // this.props.history.push('/employees');
-        //     });
-        // }else{
-        //     EmployeeService.updateEmployee(employee, this.state.id).then( res => {
-        //         // this.props.history.push('/employees');
-        //     });
-        // }
+        if(this.state.id === '_add'){
+            EmployeeService.createEmployee(employee).then(res =>{
+                this.props.history.push('/home');
+            });
+        }else{
+            EmployeeService.updateEmployee(employee, this.state.id).then( res => {
+                this.props.history.push('/home');
+            });
+        }
     }
     getChecked =(name) =>{
         return this.state.departments.includes(name);
@@ -258,22 +293,22 @@ class PayrollForm extends Component{
                             <label class="label text" for="profile">Profile image</label>
                             <div class="profile-radio-content">
                                 <label>
-                                    <input type="radio" id="profile1" name="profile"
+                                    <input type="radio" id="profile1" name="profile" checked={this.state.profilePic === '../../assets/profile-images/Ellipse -3.png'}
                                         value="../../assets/profile-images/Ellipse -3.png" onChange={this.changeProfilePicHandler} required/>
                                     <img class="profile" id='image1' src={profile1}/>  
                                 </label>
                                 <label>
                                     <input type="radio" id="profile2" name="profile"
-                                        value="../../assets/profile-images/Ellipse -1.png" onChange={this.changeProfilePicHandler} required/>
+                                        value="../../assets/profile-images/Ellipse -1.png" checked={this.state.profilePic === '../../assets/profile-images/Ellipse -1.png'} onChange={this.changeProfilePicHandler} required/>
                                     <img class="profile" id='image2' src={profile2}/>  
                                 </label>
                                 <label>
-                                    <input type="radio" id="profile3" name="profile"
+                                    <input type="radio" id="profile3" name="profile" checked={this.state.profilePic === '../../assets/profile-images/Ellipse -8.png'}
                                         value="../../assets/profile-images/Ellipse -8.png" onChange={this.changeProfilePicHandler}  required/>
                                     <img class="profile" id='image3' src={profile3}/>  
                                 </label>
                                 <label>
-                                    <input type="radio" id="profile4" name="profile"
+                                    <input type="radio" id="profile4" name="profile" checked={this.state.profilePic === '../../assets/profile-images/Ellipse -7.png'}
                                         value="../../assets/profile-images/Ellipse -7.png" onChange={this.changeProfilePicHandler}  required/>
                                     <img class="profile" id='image4' src={profile4}/>  
                                 </label>
@@ -291,28 +326,28 @@ class PayrollForm extends Component{
                         <div class="row-content">
                             <label class="label text" for="department">Department</label>
                             <div>
-                                <input class="checkbox" type="checkbox" id="hr" name="department" value="HR" onChange={this.onCheckChange}/>
+                                <input class="checkbox" type="checkbox" id="hr" name="department" value="HR" checked={this.state.departments.includes("HR")} onChange={this.onCheckChange}/>
                                 <label class="text" for="hr">HR</label>
-                                <input class="checkbox" type="checkbox" id="sales" name="department" value="Sales" onChange={this.onCheckChange}/>
+                                <input class="checkbox" type="checkbox" id="sales" name="department" value="Sales" checked={this.state.departments.includes("Sales")} onChange={this.onCheckChange}/>
                                 <label class="text" for="sales">Sales</label>
-                                <input class="checkbox" type="checkbox" id="finance" name="department" value="finance" onChange={this.onCheckChange} />
+                                <input class="checkbox" type="checkbox" id="finance" name="department" value="finance" checked={this.state.departments.includes("finance")} onChange={this.onCheckChange} />
                                 <label class="text" for="finance">Finance</label>
-                                <input class="checkbox" type="checkbox" id="engineer" name="department" value="Engineer" onChange={this.onCheckChange}/>
+                                <input class="checkbox" type="checkbox" id="engineer" name="department" value="Engineer" checked={this.state.departments.includes("Engineer")} onChange={this.onCheckChange}/>
                                 <label class="text" for="engineer">Engineer</label>
-                                <input class="checkbox" type="checkbox" id="others" name="department" value="Others" onChange={this.onCheckChange}/>
+                                <input class="checkbox" type="checkbox" id="others" name="department" value="Others" checked={this.state.departments.includes("Others")} onChange={this.onCheckChange}/>
                                 <label class="text" for="others">Others</label>
                             </div>
                         </div>
                         <div class="row-content">
                             <label class="label text" for="salary">Choose your salary: </label>
                             <input class="input" onChange={this.changeSalaryHandler} type="range" name="salary" id="salary" min="300000"
-                                    max="500000" step="100" value="400000"/>
-                            <output class="salary-output text" for="salary">400000</output>
+                                    max="500000" step="100" value={this.state.salary}/>
+                            <output class="salary-output text" for="salary">{this.state.salary}</output>
                         </div>
                         <div class="row-content">
                         <label class="label text" for="startDate">Start Date</label>
                         <div>
-                            <select id="day" name="day" onChange={this.changeDayHandler}> 
+                            <select id="day" name="day" value={this.state.day} onChange={this.changeDayHandler}> 
                                 <option value="01">1</option>
                                 <option value="02">2</option>
                                 <option value="03">3</option>
@@ -345,7 +380,7 @@ class PayrollForm extends Component{
                                 <option value="30">30</option>
                                 <option value="31">31</option>
                             </select>
-                            <select id="month" name="Month" onChange={this.changeMonthHandler}>
+                            <select id="month" value={this.state.month} name="Month" onChange={this.changeMonthHandler}>
                                 <option value="01">January</option>
                                 <option value="02">Febuary</option>
                                 <option value="03">March</option>
@@ -359,7 +394,7 @@ class PayrollForm extends Component{
                                 <option value="11">November</option>
                                 <option value="12">December</option>
                             </select>
-                            <select id="year" name="Year" onChange={this.changeYearHandler}>
+                            <select id="year" name="Year" value={this.state.year} onChange={this.changeYearHandler}>
                                 <option value="2020">2020</option>
                                 <option value="2019">2019</option>
                                 <option value="2018">2018</option>
@@ -370,7 +405,7 @@ class PayrollForm extends Component{
                     </div>
                     <div class="row-content">
                         <label class="label text" for="notes">Notes</label>
-                        <textarea id="notes" onChange={this.changeNotesHandler} class="input" name="Notes" placeholder="" style={{ height: '100%' }}></textarea>
+                        <textarea id="notes" value={this.state.notes} onChange={this.changeNotesHandler} class="input" name="Notes" placeholder="" style={{ height: '100%' }}></textarea>
                     </div>
                     <div class="buttonParent">
                         <a href="./employee_payroll_home.html" class="resetButton button cancelButton">Cancel</a>
@@ -386,6 +421,6 @@ class PayrollForm extends Component{
     }
 }
 
-export default PayrollForm
+export default withRouter(PayrollForm)
 
 
