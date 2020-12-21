@@ -8,113 +8,7 @@ import './payroll-form.scss';
 import logo from '../../assets/images/logo.png';
 import {useParams,Link,withRouter} from 'react-router-dom';
 import EmployeeService from '../../services/EmployeeService'
-import { checkName } from "./utility.js";
-
-// const PayrollForm = (props) => {
-//     let initialValue ={
-//         name: '',
-//         profileArray:[
-//             {url: '../../../assets/profile-images/Ellipse -3.png'},
-//             {url: '../../../assets/profile-images/Ellipse 1.png'},
-//             {url: '../../../assets/profile-images/Ellipse -8.png'},
-//             {url: '../../../assets/profile-images/Ellipse -7.png'}
-//         ],
-//         allDepartment:[
-//             'HR','Sales','Finance','Engineer','Others'
-//         ],
-//         departmentValue: [],
-//         gender: '',
-//         salary: '',
-//         day: '1',
-//         month: 'Jan',
-//         year: '2020',
-//         startDate: '',
-//         notes: '',
-//         id: '',
-//         profileUrl: '',
-//         isUpdate: false,
-//         error: {
-//             department: '',
-//             name: '',
-//             gender: '',
-//             salary: '',
-//             profileUrl: '',
-//             startDate: ''
-//         }
-//     }
-
-//     const [formValue,setForm]= useState(initialValue);
-
-//     const changeValue =(event) =>{
-//         setForm({...formValue,[event.target.name]:event.target.value})
-//     }
-
-//     const onCheckChange =(name) =>{
-//         let index = formValue.departmentValue.indexOf(name);
-//         let checkArray =[...formValue.departmentValue]
-//         if(index>-1)
-//             checkArray.splice(index,1)
-//         else 
-//             checkArray.push(name);
-//         setForm({...formValue,departmentValue: checkArray});
-//     }
-
-//     const getChecked =(name) =>{
-//         return formValue.departmentValue && formValue.departmentValue.includes(name);
-//     }
-
-//     const validDate =async()=>{
-//         let isError =false;
-//         let error={
-//             department: '',
-//             name: '',
-//             gender: '',
-//             salary: '',
-//             profileUrl: '',
-//             startDate: ''
-//         }
-        
-//         if(formValue.name.length<1){
-//             error.name ='name is required field';
-//             isError = true;
-//         }
-
-//         if(formValue.gender.length<1){
-//             error.gender ='gender is required field'
-//             isError =true;
-//         }
-
-//         if(formValue.salary.length<1){
-//             error.gender ='salary is required field'
-//             isError =true;
-//         }
-//     }
-
-//     return(
-//         <div className="payroll-main">
-//             <Toolbar/>
-//             <div className="content">
-//                 <form className="form" action="#" onSubmit={save}>
-//                     <div className="form-head">Employee Payroll form</div>
-//                     <div className="row-content">
-//                         <label className="label text" htmlFor="name">Name</label>
-//                         <input className="input" type="text" id="name" value={formValue.name} onChange={changeValue} placeholder="Your name..."/>
-//                     </div>
-//                     <div className="error">{formValue.error.name}</div>
-//                     <div className="row">
-//                         <label>
-//                             <input type="radio" checked={formValue.profileUrl=='../../assets/profile-images/Ellipse -3.png'} name="profileUrl" 
-//                                 value="../../assets/profile-images/Ellipse -3.png" onChange={changeValue}/>
-
-//                         </label>
-//                     </div>
-//                 </form>
-//             </div>
-//             {/* <p> Hello </p> */}
-//         </div>
-//     )
-// }
-
+import { checkName,checkStartDate } from "./utility.js";
 
 class PayrollForm extends Component{
     constructor(props){
@@ -131,7 +25,9 @@ class PayrollForm extends Component{
             gender: '',
             profilePic: '',
             departments: [],
-            nameError: ""
+            nameError: "",
+            departmentError: '',
+            dateError: ''
         }
         this.changeNameHandler=this.changeNameHandler.bind(this);
         this.changeSalaryHandler=this.changeSalaryHandler.bind(this);
@@ -141,10 +37,6 @@ class PayrollForm extends Component{
         this.changeMonthHandler=this.changeMonthHandler.bind(this);
         this.changeYearHandler=this.changeYearHandler.bind(this);
         this.changeProfilePicHandler=this. changeProfilePicHandler.bind(this);
-        
-        // this.getChecked=this.getChecked.bind(this);
-        // this.onCheckChange=this.onCheckChange.bind(this);
-
     }
     componentWillMount(){
         if(this.state.id === '_add'){
@@ -179,9 +71,10 @@ class PayrollForm extends Component{
         console.log("The state is");
         console.log(this.state);       
     }
-    saveOrUpdateEmployee = (event) => {
+    saveOrUpdateEmployee = async(event) => {
         event.preventDefault();
         console.log(this.state.departments);
+        if(this.validateData(this.state)){
         let employee = {
             name: this.state.name,
             departments : this.state.departments,
@@ -189,13 +82,9 @@ class PayrollForm extends Component{
             salary: this.state.salary,
             startDate: `${this.state.year}-${this.state.month}-${this.state.day}`,
             notes: this.state.notes,
-            // id: formValue.id,
             profilePic: this.state.profilePic,
           };
         console.log('employee => ' + JSON.stringify(employee));
-        // EmployeeService.createEmployee(employee);
-
-
         if(this.state.id === '_add'){
             EmployeeService.createEmployee(employee).then(res =>{
                 this.props.history.push('/home');
@@ -205,6 +94,7 @@ class PayrollForm extends Component{
                 this.props.history.push('/home');
             });
         }
+    }
     }
     getChecked =(name) =>{
         return this.state.departments.includes(name);
@@ -222,29 +112,31 @@ class PayrollForm extends Component{
             this.state.departments.splice(index,1);
         }
         this.setState({departments: this.state.departments});
-        // console.log(this.state.departments);
-        // let index = this.state.departments.indexOf(name);
-        // let checkArray =this.state.departments;
-        // if(index>-1)
-        //     checkArray.splice(index,1)
-        // else 
-        // checkArray.push(name);
-        // console.log(checkArray);
-        // this.setState({departments:checkArray});
-        // this.setState({departments: [...this.state.departments,name]});
-        // console.log("departments selected "+this.state.departments);
     }
     changeNameHandler =(event)=>{
-
-        // try {
-        //     checkName(event.target.value);
-        //     this.setState({ nameError: "" });
-        //     this.setState({name:event.target.value});
-        // } catch (error) {
-        //     this.setState({ nameError: error });
-        // }
         this.setState({name:event.target.value});
-        console.log("name is "+this.state.name);
+        try {
+            checkName(event.target.value);
+            this.setState({ nameError: "" });
+        } catch (error) {
+            this.setState({ nameError: error });
+        }
+    }
+
+    validateData =(data)=>{
+        if(data.nameError!=""){
+            return false;
+        }
+        if(data.departments.length==0){
+            this.setState({departmentError: "Pleast Select Atleast one department"});
+            return false;
+        }
+        if(data.dateError!=""){
+            return false;
+        }
+
+        return true;
+
     }
     changeSalaryHandler =(event)=>{
         this.setState({salary:event.target.value});
@@ -265,15 +157,43 @@ class PayrollForm extends Component{
     }
     changeDayHandler=(event)=>{
         this.setState({day:event.target.value});
+        try {
+            checkStartDate(
+              new Date(
+                this.state.year,
+                this.state.month - 1,
+                event.target.value
+              )
+            );
+            this.setState({ dateError: "" });
+          } catch (error) {
+            this.setState({ dateError: error });
+          }
         console.log("day entered is"+this.state.day);
     }
     changeMonthHandler=(event)=>{
-        // let monthEntered= event.target.value;
         this.setState({month:event.target.value});
+        try {
+            checkStartDate(
+              new Date(this.state.year, event.target.value - 1, this.state.day)
+            );
+            this.setState({ dateError: "" });
+          } catch (error) {
+            this.setState({ dateError: error });
+          }
         console.log("month entered is"+this.state.month);
     }
     changeYearHandler=(event)=>{
         this.setState({year:event.target.value});
+        try {
+            checkStartDate(
+              new Date(event.target.value, this.state.month - 1, this.state.day)
+            );
+            this.setState({ dateError: "" });
+          } catch (error) {
+            this.setState({ dateError: error });
+          }
+
         console.log("year entered is "+this.state.year);
     }
     cancel(){
@@ -349,6 +269,7 @@ class PayrollForm extends Component{
                                 <label class="text" for="engineer">Engineer</label>
                                 <input class="checkbox" type="checkbox" id="others" name="department" value="Others" checked={this.state.departments.includes("Others")}  onChange={this.onCheckChange}/>
                                 <label class="text" for="others">Others</label>
+                                <error-output class="text-error" for="text" value={this.state.departmentError}>{this.state.departmentError}</error-output>
                             </div>
                         </div>
                         <div class="row-content">
@@ -414,6 +335,7 @@ class PayrollForm extends Component{
                                 <option value="2017">2017</option>
                                 <option value="2016">2016</option>
                             </select>
+                            <error-output class="text-error" for="text" value={this.state.dateError}>{this.state.dateError}</error-output>
                         </div>
                     </div>
                     <div class="row-content">
@@ -422,7 +344,6 @@ class PayrollForm extends Component{
                     </div>
                     <div class="buttonParent">
                         <Link to="/home" class="resetButton button cancelButton">Cancel</Link>
-                        {/* <a href="./employee_payroll_home.html" class="resetButton button cancelButton">Cancel</a> */}
                         <div class="submit-reset">
                             <button type="submit" class="button submitButton" id="submitButton" onClick={this.saveOrUpdateEmployee}>Submit</button>
                             <button type="reset" class="resetButton button">Reset</button>

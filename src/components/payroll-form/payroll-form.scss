@@ -76,10 +76,12 @@ body{
 
 .label{
     min-width: 140px;
+    margin-left: 20px;
 }
 label{
     padding: 12px 12px 12px 0;
     display: inline-block;
+    margin-left: 0px;
 }
 
 .text{
@@ -87,6 +89,8 @@ label{
     color: #42515f;
     opacity: 1;
     font-family: Roboto;
+    margin-left: 20px;
+    text-align: left;
 }
 .input{
     width: 100%;
