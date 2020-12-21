@@ -71,7 +71,7 @@ class Home extends Component{
                 <div class="main-content">
                     <div class="header-content">
                         <div class="emp-detail-text">
-                            Employee Details <div class="emp-count">10</div>
+                            Employee Details <div class="emp-count">{this.state.employees.length}</div>
                         </div>
                         <Link to="/add-employee/_add" class="add-button">
                         <img src="../../assets/icons/add-24px.svg" alt=""/>Add User</Link>
@@ -95,7 +95,7 @@ class Home extends Component{
                                     <td>{employee.gender}</td>
                                     <td>{
                                        employee.departments.map(
-                                           dept=>(<div class='dept-level'>{dept}</div>)
+                                           (dept,id) => (<div class="dept-level">{dept}</div>)
                                        )}</td>
                                     <td>{employee.salary}</td>
                                     <td>{employee.startDate}</td>

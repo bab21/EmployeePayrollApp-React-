@@ -122,7 +122,7 @@ class PayrollForm extends Component{
         this.state={
             id: this.props.match.params.id,
             name: '',
-            salary: '',
+            salary: '400000',
             notes: '',
             day: '1',
             month: 'Jan',
@@ -212,11 +212,14 @@ class PayrollForm extends Component{
         const target = event.target;
         var value= target.value;
         if(target.checked){
-            this.state.departments.push(value);
+            if(!this.state.departments.includes(value))
+                 this.state.departments.push(value);
         }
         else{
-            this.state.departments.slice(value,1);
+            let index=this.state.departments.indexOf(value);
+            this.state.departments.splice(index,1);
         }
+        this.setState({departments: this.state.departments});
         // console.log(this.state.departments);
         // let index = this.state.departments.indexOf(name);
         // let checkArray =this.state.departments;
@@ -328,13 +331,13 @@ class PayrollForm extends Component{
                             <div>
                                 <input class="checkbox" type="checkbox" id="hr" name="department" value="HR" checked={this.state.departments.includes("HR")} onChange={this.onCheckChange}/>
                                 <label class="text" for="hr">HR</label>
-                                <input class="checkbox" type="checkbox" id="sales" name="department" value="Sales" checked={this.state.departments.includes("Sales")} onChange={this.onCheckChange}/>
+                                <input class="checkbox" type="checkbox" id="sales" name="department" value="Sales" checked={this.state.departments.includes("Sales")}  onChange={this.onCheckChange}/>
                                 <label class="text" for="sales">Sales</label>
-                                <input class="checkbox" type="checkbox" id="finance" name="department" value="finance" checked={this.state.departments.includes("finance")} onChange={this.onCheckChange} />
+                                <input class="checkbox" type="checkbox" id="finance" name="department" value="finance" checked={this.state.departments.includes("finance")}  onChange={this.onCheckChange} />
                                 <label class="text" for="finance">Finance</label>
-                                <input class="checkbox" type="checkbox" id="engineer" name="department" value="Engineer" checked={this.state.departments.includes("Engineer")} onChange={this.onCheckChange}/>
+                                <input class="checkbox" type="checkbox" id="engineer" name="department" value="Engineer" checked={this.state.departments.includes("Engineer")}  onChange={this.onCheckChange}/>
                                 <label class="text" for="engineer">Engineer</label>
-                                <input class="checkbox" type="checkbox" id="others" name="department" value="Others" checked={this.state.departments.includes("Others")} onChange={this.onCheckChange}/>
+                                <input class="checkbox" type="checkbox" id="others" name="department" value="Others" checked={this.state.departments.includes("Others")}  onChange={this.onCheckChange}/>
                                 <label class="text" for="others">Others</label>
                             </div>
                         </div>
@@ -408,7 +411,8 @@ class PayrollForm extends Component{
                         <textarea id="notes" value={this.state.notes} onChange={this.changeNotesHandler} class="input" name="Notes" placeholder="" style={{ height: '100%' }}></textarea>
                     </div>
                     <div class="buttonParent">
-                        <a href="./employee_payroll_home.html" class="resetButton button cancelButton">Cancel</a>
+                        <Link to="/home" class="resetButton button cancelButton">Cancel</Link>
+                        {/* <a href="./employee_payroll_home.html" class="resetButton button cancelButton">Cancel</a> */}
                         <div class="submit-reset">
                             <button type="submit" class="button submitButton" id="submitButton" onClick={this.saveOrUpdateEmployee}>Submit</button>
                             <button type="reset" class="resetButton button">Reset</button>
