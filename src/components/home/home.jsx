@@ -93,10 +93,10 @@ class Home extends Component{
                                     } alt="Image"/></td>
                                     <td>{employee.name}</td>
                                     <td>{employee.gender}</td>
-                                    <td>{
-                                       employee.departments.map(
-                                           (dept,id) => (<div class="dept-level">{dept}</div>)
-                                       )}</td>
+                                    <td>{employee.departments &&
+                                         employee.departments.map((department) => (
+                                        <div className="dept-label">{department}</div>
+                                        ))}</td>
                                     <td>{employee.salary}</td>
                                     <td>{employee.startDate}</td>
                                     <td>

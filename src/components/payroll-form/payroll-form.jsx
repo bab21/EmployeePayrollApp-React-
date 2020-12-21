@@ -8,6 +8,7 @@ import './payroll-form.scss';
 import logo from '../../assets/images/logo.png';
 import {useParams,Link,withRouter} from 'react-router-dom';
 import EmployeeService from '../../services/EmployeeService'
+import { checkName } from "./utility.js";
 
 // const PayrollForm = (props) => {
 //     let initialValue ={
@@ -129,7 +130,8 @@ class PayrollForm extends Component{
             year: '2020',
             gender: '',
             profilePic: '',
-            departments: []
+            departments: [],
+            nameError: ""
         }
         this.changeNameHandler=this.changeNameHandler.bind(this);
         this.changeSalaryHandler=this.changeSalaryHandler.bind(this);
@@ -233,6 +235,14 @@ class PayrollForm extends Component{
         // console.log("departments selected "+this.state.departments);
     }
     changeNameHandler =(event)=>{
+
+        // try {
+        //     checkName(event.target.value);
+        //     this.setState({ nameError: "" });
+        //     this.setState({name:event.target.value});
+        // } catch (error) {
+        //     this.setState({ nameError: error });
+        // }
         this.setState({name:event.target.value});
         console.log("name is "+this.state.name);
     }
@@ -290,7 +300,7 @@ class PayrollForm extends Component{
                         <div class="row-content">
                             <label class="label text" for="name">Name</label>
                             <input class="input" value={this.state.name} onChange={this.changeNameHandler} type="text" id="name" name="name" placeholder="Enter Your name" required></input>
-                            <error-output class="text-error" for="text"></error-output>
+                            <error-output class="text-error" for="text" value={this.state.nameError}>{this.state.nameError}</error-output>
                         </div>
                         <div class="row-content">
                             <label class="label text" for="profile">Profile image</label>
