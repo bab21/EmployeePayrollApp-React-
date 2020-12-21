@@ -75,27 +75,44 @@ class PayrollForm extends Component{
         event.preventDefault();
         console.log(this.state.departments);
         if(this.validateData(this.state)){
-        let employee = {
-            name: this.state.name,
-            departments : this.state.departments,
-            gender: this.state.gender,
-            salary: this.state.salary,
-            startDate: `${this.state.year}-${this.state.month}-${this.state.day}`,
-            notes: this.state.notes,
-            profilePic: this.state.profilePic,
-          };
-        console.log('employee => ' + JSON.stringify(employee));
-        if(this.state.id === '_add'){
-            EmployeeService.createEmployee(employee).then(res =>{
-                this.props.history.push('/home');
-            });
-        }else{
-            EmployeeService.updateEmployee(employee, this.state.id).then( res => {
-                this.props.history.push('/home');
-            });
+            let employee = {
+                name: this.state.name,
+                departments : this.state.departments,
+                gender: this.state.gender,
+                salary: this.state.salary,
+                startDate: `${this.state.year}-${this.state.month}-${this.state.day}`,
+                notes: this.state.notes,
+                profilePic: this.state.profilePic,
+            };
+            console.log('employee => ' + JSON.stringify(employee));
+            if(this.state.id === '_add'){
+                EmployeeService.createEmployee(employee).then(res =>{
+                    this.props.history.push('/home');
+                });
+            }else{
+                EmployeeService.updateEmployee(employee, this.state.id).then( res => {
+                    this.props.history.push('/home');
+                });
+            }
         }
     }
-    }
+
+    reset = (event) => {
+        this.setState({
+          name: "",
+          profileUrl: "",
+          gender: "",
+          departments: [],
+          salary: 400000,
+          day: 0,
+          month: 0,
+          year: 0,
+          notes: "",
+          nameError: "",
+          dateError: "",
+          departmentError: "",
+        });
+    };
     getChecked =(name) =>{
         return this.state.departments.includes(name);
     }
@@ -346,7 +363,7 @@ class PayrollForm extends Component{
                         <Link to="/home" class="resetButton button cancelButton">Cancel</Link>
                         <div class="submit-reset">
                             <button type="submit" class="button submitButton" id="submitButton" onClick={this.saveOrUpdateEmployee}>Submit</button>
-                            <button type="reset" class="resetButton button">Reset</button>
+                            <button type="reset" class="resetButton button" onClick={this.reset}>Reset</button>
                         </div>
                     </div>
                     </form>
