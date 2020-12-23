@@ -34,9 +34,12 @@ body{
     letter-spacing: 0px;
     color: #82a70c;
     text-transform: capitalize;
+    margin-left: 12px;
 }
 
-.emp-payroll{color: #42515f;}
+.emp-payroll{
+    color: #42515f;
+    margin-left: 0px;}
 
 .form-content{
     min-height: calc(100% - 80px);
@@ -150,8 +153,15 @@ select {
 }
 
 .submitButton {
-    background-color: #f5f5f5;
+    background-color: green;
     margin-right: 30px;
+    color: white;
+}
+
+.submitButton[disabled]{
+  border: 1px solid #999999;
+  background-color: white;
+  color: black;
 }
 
 .cancelButton {
@@ -176,7 +186,7 @@ error-output{
     }
 }
 
-@media only screen and (max-width: 600px) {
+@media only screen and (max-width: 800px) {
     .form {
         margin-top: 10px;
     }

@@ -5,6 +5,7 @@ import profile3 from '../../assets/profile-images/Ellipse -8.png';
 import profile4 from '../../assets/profile-images/Ellipse -7.png';
 import './home.scss';
 import logo from '../../assets/images/logo.png';
+import searchIcon from '../../assets/icons/search_icon.svg'
 
 import deleteIcon from '../../assets/icons/delete-black-18dp.svg';
 import updateIcon from '../../assets/icons/create-black-18dp.svg'
@@ -16,7 +17,8 @@ class Home extends Component{
         super(props)
 
         this.state = {
-                employees: []
+                employees: [],
+                allEmployees: [],
         }
 
         
@@ -33,11 +35,21 @@ class Home extends Component{
             console.log("message : "+res.message);
             console.log(res.data.data);
             this.setState({ employees: res.data.data});
+            this.setState({ allEmployees: res.data.data});
         })
         .catch(err => console.log(err));
         console.log("all" +this.state.employees);
     }
     
+    search = async (event) => {
+        let searchName = event.target.value;
+        await this.setState({employees: this.state.allEmployees});
+        let employeeList = this.state.employees;
+        if (searchName.trim().length > 0)
+        employeeList = employeeList.filter((employee) => 
+              employee.name.toLowerCase().indexOf(searchName.toLowerCase()) > -1 );
+        this.setState({ employees: employeeList });
+      }
 
     deleteEmployee(id){
         EmployeeService.deleteEmployee(id).then( res => {
@@ -73,6 +85,11 @@ class Home extends Component{
                         <div class="emp-detail-text">
                             Employee Details <div class="emp-count">{this.state.employees.length}</div>
                         </div>
+                        <div class="search-box">
+                             <input type="text" placeholder="Search" class="search-input" onChange={this.search} />
+                             <img className="search-icon" src={searchIcon} alt="Search Icon" />
+                        </div>
+                        
                         <Link to="/add-employee/_add" class="add-button">
                         <img src="../../assets/icons/add-24px.svg" alt=""/>Add User</Link>
                     </div>

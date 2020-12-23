@@ -155,6 +155,34 @@ class PayrollForm extends Component{
         return true;
 
     }
+    allFieldCorrect =()=>{
+        if(this.state.nameError!="")
+        return false;
+        if(this.state.departmentError!="")
+        return false;
+        if(this.state.dateError!="")
+        return false;
+        if(this.state.name=="")
+        return false;
+        if(this.state.gender=="")
+        return false;
+        if(this.state.salary=="")
+        return false;
+        if(this.state.profilePic=="")
+        return false;
+        if(this.state.day=="")
+        return false;
+        if(this.state.month=="")
+        return false;
+        if(this.state.year=="")
+        return false;
+        if(this.state.notes=="")
+        return false;
+        if(this.state.departments.length==0)
+        return false;
+        
+        return true;
+    }
     changeSalaryHandler =(event)=>{
         this.setState({salary:event.target.value});
         console.log("salary chosen is"+this.state.salary);
@@ -362,7 +390,7 @@ class PayrollForm extends Component{
                     <div class="buttonParent">
                         <Link to="/home" class="resetButton button cancelButton">Cancel</Link>
                         <div class="submit-reset">
-                            <button type="submit" class="button submitButton" id="submitButton" onClick={this.saveOrUpdateEmployee}>Submit</button>
+                            <button type="submit" class="button submitButton" disabled={!this.allFieldCorrect()} id="submitButton" onClick={this.saveOrUpdateEmployee}>Submit</button>
                             <button type="reset" class="resetButton button" onClick={this.reset}>Reset</button>
                         </div>
                     </div>
